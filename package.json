@@ -1,0 +1,21 @@
+{
+  "name": "manushop",
+  "version": "1.0.0",
+  "description": "Shop in MERN",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon backend/server"
+  },
+  "keywords": [
+    "MERN"
+  ],
+  "author": "Manuel Rodriguez",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
