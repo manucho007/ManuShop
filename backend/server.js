@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import colors from 'colors';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 const app = express();
 
@@ -12,12 +13,20 @@ dotenv.config();
 // Connection to DB
 connectDB();
 
-// Route mounts
+// API running
 app.get('/', (req, res) => {
   res.send('API is running');
 });
 
+// Route mounts
 app.use('/api/products', productRoutes);
+
+// ***************Middleware
+// Deal with 404
+app.use(notFound);
+
+// Custom error handler
+app.use(errorHandler);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
