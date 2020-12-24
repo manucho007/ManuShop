@@ -5,15 +5,22 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { Table, Button } from 'react-bootstrap';
 import { listUsers } from '../actions/userActions';
-const UserListScreen = () => {
+const UserListScreen = ({ history }) => {
   const dispatch = useDispatch();
+
   // Getting the list of users from state
   const userList = useSelector((state) => state.userList);
   const { loading, error, users } = userList;
-
+  //   Get current logged user from state
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
   useEffect(() => {
-    dispatch(listUsers());
-  }, [dispatch]);
+    if (userInfo && userInfo.isAdmin) {
+      dispatch(listUsers());
+    } else {
+      history.push('login');
+    }
+  }, [dispatch, userInfo, history]);
 
   const deleteHandler = (id) => {
     console.log(`delete ID ${id}`);
