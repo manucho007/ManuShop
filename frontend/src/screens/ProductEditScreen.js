@@ -5,7 +5,8 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { Form, Button } from 'react-bootstrap';
-import { listProductDetails } from '../actions/productActions';
+import { listProductDetails, updateProduct } from '../actions/productActions';
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants';
 // import { USER_CREATE_RESET } from '../constants/productConstants';
 
 const ProductEditScreen = ({ match, history }) => {
@@ -23,37 +24,47 @@ const ProductEditScreen = ({ match, history }) => {
   const productDetails = useSelector((state) => state.productDetails);
   const { loading, error, product } = productDetails;
 
-  //   const productUpdate = useSelector((state) => state.productUpdate);
-  //   const {
-  //     loading: loadingUpdate,
-  //     error: errorUpdate,
-  //     success: successUpdate,
-  //   } = productUpdate;
+  const productUpdate = useSelector((state) => state.productUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = productUpdate;
 
   useEffect(() => {
-    if (!product.name || product._id !== productId) {
-      dispatch(listProductDetails(productId));
+    if (successUpdate) {
+      dispatch({ type: PRODUCT_UPDATE_RESET });
+      history.push(`/admin/productlist`);
     } else {
-      setName(product.name);
-      setPrice(product.price);
-      setDescription(product.description);
-      setBrand(product.brand);
-      setImage(product.image);
-      setCategory(product.cateogry);
-      setCountInStock(product.countInStock);
+      if (!product.name || product._id !== productId) {
+        dispatch(listProductDetails(productId));
+      } else {
+        setName(product.name);
+        setPrice(product.price);
+        setDescription(product.description);
+        setBrand(product.brand);
+        setImage(product.image);
+        setCategory(product.cateogry);
+        setCountInStock(product.countInStock);
+      }
     }
-  }, [product, dispatch, productId, history]);
+  }, [product, dispatch, productId, history, successUpdate]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     // dispatch update product
-    // dispatch(
-    //   updateProduct({
-    //     _id: productId,
-    //     name,
-    //     price,description,brand,image,category,countInStock
-    //   })
-    // );
+    dispatch(
+      updateProduct({
+        _id: productId,
+        name,
+        price,
+        description,
+        brand,
+        image,
+        category,
+        countInStock,
+      })
+    );
   };
   return (
     <>
@@ -62,8 +73,8 @@ const ProductEditScreen = ({ match, history }) => {
       </Link>
       <FormContainer>
         <h1>Edit Product</h1>
-        {/* {loadingUpdate && <Loader />}
-      {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>} */}
+        {loadingUpdate && <Loader />}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
         {loading ? (
           <Loader />
         ) : error ? (
