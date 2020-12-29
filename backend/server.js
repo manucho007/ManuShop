@@ -36,16 +36,16 @@ app.get('/api/config/paypal', (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
 
+// make uploads folder static
+const __dirname = path.resolve(); //__dirname is not available in ES6 modules so we use this
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
 // ***************Middleware
 // Deal with 404
 app.use(notFound);
 
 // Custom error handler
 app.use(errorHandler);
-
-// make uploads folder static
-const __dirname = path.resolve(); //__dirname is not available in ES6 modules so we use this
-app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 // Start Server
 const PORT = process.env.PORT || 5000;
