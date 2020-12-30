@@ -1,4 +1,6 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
+import SearchBox from './SearchBox';
 // We use this when we need something from state
 // If we want an action we usedispatch
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,6 +26,9 @@ const Header = () => {
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
+            {/* If just placed then searchbox doesn't have access to prop history
+            that's why Route render is necessary */}
+            <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link>

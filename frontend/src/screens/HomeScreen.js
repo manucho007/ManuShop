@@ -6,7 +6,10 @@ import Loader from '../components/Loader';
 import { Col, Row } from 'react-bootstrap';
 import { listProducts } from '../actions/productActions';
 
-const HomeScreen = () => {
+const HomeScreen = ({ match }) => {
+  // Check keyword
+  const keyword = match.params.keyword;
+
   const dispatch = useDispatch();
 
   // Grab the data from state
@@ -16,8 +19,8 @@ const HomeScreen = () => {
   // Firing the action
   // useEffect triggers as soon as the component loads
   useEffect(() => {
-    dispatch(listProducts());
-  }, [dispatch]);
+    dispatch(listProducts(keyword));
+  }, [dispatch, keyword]);
 
   return (
     <>
