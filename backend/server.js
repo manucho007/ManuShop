@@ -26,11 +26,6 @@ if (process.env.NODE_ENV === 'development') {
 // Parser
 app.use(express.json());
 
-// API running
-app.get('/', (req, res) => {
-  res.send('API is running');
-});
-
 // Route mounts
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
@@ -45,6 +40,21 @@ app.get('/api/config/paypal', (req, res) =>
 // make uploads folder static
 const __dirname = path.resolve(); //__dirname is not available in ES6 modules so we use this
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+// Deployment setup
+if (process.env.NODE_ENV === 'production') {
+  // First we set the folder to static
+  app.use(express.static(path.join(__dirname, '/frontend/build')));
+
+  // Any route pointing to any other place other than routes above will be pointing to this file
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  );
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....');
+  });
+}
 
 // ***************Middleware
 // Deal with 404
